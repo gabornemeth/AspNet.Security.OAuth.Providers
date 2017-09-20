@@ -48,5 +48,10 @@ namespace AspNet.Security.OAuth.Strava
         /// Default value for <see cref="OAuthOptions.UserInformationEndpoint"/>.
         /// </summary>
         public const string UserInformationEndpoint = "https://www.strava.com/api/v3/athlete";
+
+        /// <summary>
+        /// Default value for <see cref="OAuthOptions.Scope"/>.
+        /// </summary>
+        public const string Scope = "public";
     }
 }

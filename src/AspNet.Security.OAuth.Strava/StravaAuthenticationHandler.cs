@@ -22,6 +22,9 @@ namespace AspNet.Security.OAuth.Strava
 {
     public class StravaAuthenticationHandler : OAuthHandler<StravaAuthenticationOptions>
     {
+        /// <summary>
+        /// Authentication handler for Strava authentication
+        /// </summary>
         public StravaAuthenticationHandler(
             [NotNull] IOptionsMonitor<StravaAuthenticationOptions> options,
             [NotNull] ILoggerFactory factory,

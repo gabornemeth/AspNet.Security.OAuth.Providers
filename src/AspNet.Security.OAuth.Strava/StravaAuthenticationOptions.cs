@@ -21,17 +21,17 @@ namespace AspNet.Security.OAuth.Strava
         public StravaAuthenticationOptions()
         {
             ClaimsIssuer = StravaAuthenticationDefaults.Issuer;
-
             CallbackPath = new PathString(StravaAuthenticationDefaults.CallbackPath);
-
             AuthorizationEndpoint = StravaAuthenticationDefaults.AuthorizationEndpoint;
             TokenEndpoint = StravaAuthenticationDefaults.TokenEndpoint;
             UserInformationEndpoint = StravaAuthenticationDefaults.UserInformationEndpoint;
-            CallbackPath = new PathString("/signin-strava");
+            CallbackPath = new PathString(StravaAuthenticationDefaults.CallbackPath);
             ClaimsIssuer = StravaAuthenticationDefaults.Issuer;
-            Scope.Add("public");
+            Scope.Add(StravaAuthenticationDefaults.Scope);
+            // Adding claims
             Events.OnCreatingTicket = async context =>
             {
+                // Call out to user information endpoint with the access token
                 var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
@@ -42,8 +42,10 @@ namespace AspNet.Security.OAuth.Strava
                     throw new HttpRequestException("An error occurred while retrieving the user profile");
                 }
 
+                // Deserialise response with user data payload
                 var payload = JObject.Parse(await response.Content.ReadAsStringAsync());
 
+                // Add claims to identity
                 context.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, StravaAuthenticationHelper.GetIdentifier(payload), ClaimValueTypes.Integer));
                 context.Identity.AddClaim(new Claim(ClaimTypes.Name, StravaAuthenticationHelper.GetUsername(payload)));
                 context.Identity.AddClaim(new Claim(ClaimTypes.GivenName, StravaAuthenticationHelper.GetFirstName(payload)));
