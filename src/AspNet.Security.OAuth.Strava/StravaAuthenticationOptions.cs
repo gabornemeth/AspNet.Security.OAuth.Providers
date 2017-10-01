@@ -4,7 +4,6 @@
  * for more information concerning the license and the contributors participating to this project.
  */
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
@@ -47,7 +46,7 @@ namespace AspNet.Security.OAuth.Strava
 
                 // Add claims to identity
                 context.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, StravaAuthenticationHelper.GetIdentifier(payload), ClaimValueTypes.Integer));
-                context.Identity.AddClaim(new Claim(ClaimTypes.Name, StravaAuthenticationHelper.GetUsername(payload)));
+                context.Identity.AddClaimWhenHasValue(ClaimTypes.Name, StravaAuthenticationHelper.GetUsername(payload));
                 context.Identity.AddClaim(new Claim(ClaimTypes.GivenName, StravaAuthenticationHelper.GetFirstName(payload)));
                 context.Identity.AddClaim(new Claim(ClaimTypes.Surname, StravaAuthenticationHelper.GetLastName(payload)));
                 context.Identity.AddClaim(new Claim(ClaimTypes.Email, StravaAuthenticationHelper.GetEmail(payload)));
@@ -62,6 +61,15 @@ namespace AspNet.Security.OAuth.Strava
                 context.Identity.AddClaim(new Claim("urn:strava:created-at", StravaAuthenticationHelper.GetCreatedDate(payload)));
                 context.Identity.AddClaim(new Claim("urn:strava:updated-at", StravaAuthenticationHelper.GetLastUpdatedDate(payload)));
             };
+        }
+    }
+
+    static class ClaimsExtensions
+    {
+        public static void AddClaimWhenHasValue(this ClaimsIdentity identity, string type, string value)
+        {
+            if (value != null)
+                identity.AddClaim(new Claim(type, value));
         }
     }
 }

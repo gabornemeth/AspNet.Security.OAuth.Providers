@@ -179,11 +179,6 @@ namespace AspNet.Security.OAuth.Strava
         /// </summary>
         public static string GetUsername([NotNull] JObject user)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
             return user.Value<string>("username");
         }
 
