@@ -50,8 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="configuration">The delegate used to configure the Strava options.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
         public static AuthenticationBuilder AddStrava(
-            [NotNull] this AuthenticationBuilder builder,
-            [NotNull] string scheme,
+            [NotNull] this AuthenticationBuilder builder, [NotNull] string scheme,
             [NotNull] Action<StravaAuthenticationOptions> configuration)
         {
             return builder.AddStrava(scheme, StravaAuthenticationDefaults.DisplayName, configuration);
@@ -63,13 +62,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The authentication builder.</param>
         /// <param name="scheme">The authentication scheme associated with this instance.</param>
-        /// <param name="configuration">The delegate used to configure the Strava options.</param>
         /// <param name="name">The optional display name associated with this instance</param>
+        /// <param name="configuration">The delegate used to configure the Strava options.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
         public static AuthenticationBuilder AddStrava(
             [NotNull] this AuthenticationBuilder builder,
-            [NotNull] string scheme,
-            [CanBeNull] string name,
+            [NotNull] string scheme, [CanBeNull] string name,
             [NotNull] Action<StravaAuthenticationOptions> configuration)
         {
             return builder.AddOAuth<StravaAuthenticationOptions, StravaAuthenticationHandler>(scheme, name, configuration);
